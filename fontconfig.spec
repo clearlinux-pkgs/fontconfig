@@ -4,7 +4,7 @@
 #
 Name     : fontconfig
 Version  : 2.13.1
-Release  : 43
+Release  : 44
 URL      : https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.13.1.tar.gz
 Source0  : https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.13.1.tar.gz
 Source1  : fontconfig-trigger.service
@@ -13,6 +13,7 @@ Group    : Development/Tools
 License  : HPND MIT
 Requires: fontconfig-bin = %{version}-%{release}
 Requires: fontconfig-data = %{version}-%{release}
+Requires: fontconfig-filemap = %{version}-%{release}
 Requires: fontconfig-lib = %{version}-%{release}
 Requires: fontconfig-license = %{version}-%{release}
 Requires: fontconfig-locales = %{version}-%{release}
@@ -61,6 +62,7 @@ Group: Binaries
 Requires: fontconfig-data = %{version}-%{release}
 Requires: fontconfig-license = %{version}-%{release}
 Requires: fontconfig-services = %{version}-%{release}
+Requires: fontconfig-filemap = %{version}-%{release}
 
 %description bin
 bin components for the fontconfig package.
@@ -108,11 +110,20 @@ Requires: fontconfig-man = %{version}-%{release}
 doc components for the fontconfig package.
 
 
+%package filemap
+Summary: filemap components for the fontconfig package.
+Group: Default
+
+%description filemap
+filemap components for the fontconfig package.
+
+
 %package lib
 Summary: lib components for the fontconfig package.
 Group: Libraries
 Requires: fontconfig-data = %{version}-%{release}
 Requires: fontconfig-license = %{version}-%{release}
+Requires: fontconfig-filemap = %{version}-%{release}
 
 %description lib
 lib components for the fontconfig package.
@@ -170,30 +181,43 @@ cd %{_builddir}/fontconfig-2.13.1
 pushd ..
 cp -a fontconfig-2.13.1 build32
 popd
+pushd ..
+cp -a fontconfig-2.13.1 buildavx2
+popd
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1600365144
+export SOURCE_DATE_EPOCH=1634331494
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
-export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=auto "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=auto "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=auto "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=auto "
 %reconfigure --disable-static --sysconfdir=/usr/share/defaults
 make  %{?_smp_mflags}
 pushd ../build32/
-export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/share/pkgconfig"
 export ASFLAGS="${ASFLAGS}${ASFLAGS:+ }--32"
 export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32 -mstackrealign"
 export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32 -mstackrealign"
 export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
 %reconfigure --disable-static --sysconfdir=/usr/share/defaults  --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
+make  %{?_smp_mflags}
+popd
+unset PKG_CONFIG_PATH
+pushd ../buildavx2/
+export CFLAGS="$CFLAGS -m64 -march=x86-64-v3"
+export CXXFLAGS="$CXXFLAGS -m64 -march=x86-64-v3"
+export FFLAGS="$FFLAGS -m64 -march=x86-64-v3"
+export FCFLAGS="$FCFLAGS -m64 -march=x86-64-v3"
+export LDFLAGS="$LDFLAGS -m64 -march=x86-64-v3"
+%reconfigure --disable-static --sysconfdir=/usr/share/defaults
 make  %{?_smp_mflags}
 popd
 
@@ -202,12 +226,14 @@ export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-make VERBOSE=1 V=1 %{?_smp_mflags} check || :
+make %{?_smp_mflags} check || :
 cd ../build32;
-make VERBOSE=1 V=1 %{?_smp_mflags} check || : || :
+make %{?_smp_mflags} check || : || :
+cd ../buildavx2;
+make %{?_smp_mflags} check || : || :
 
 %install
-export SOURCE_DATE_EPOCH=1600365144
+export SOURCE_DATE_EPOCH=1634331494
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/fontconfig
 cp %{_builddir}/fontconfig-2.13.1/COPYING %{buildroot}/usr/share/package-licenses/fontconfig/ae92a5e66650b2e46038f56b0159851840513476
@@ -219,6 +245,15 @@ pushd %{buildroot}/usr/lib32/pkgconfig
 for i in *.pc ; do ln -s $i 32$i ; done
 popd
 fi
+if [ -d %{buildroot}/usr/share/pkgconfig ]
+then
+pushd %{buildroot}/usr/share/pkgconfig
+for i in *.pc ; do ln -s $i 32$i ; done
+popd
+fi
+popd
+pushd ../buildavx2/
+%make_install_v3
 popd
 %make_install
 %find_lang fontconfig-conf
@@ -229,6 +264,7 @@ install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/fontconfig-trigge
 mkdir -p %{buildroot}/usr/lib/systemd/system/update-triggers.target.wants/
 ln -s ../fontconfig-trigger.service  %{buildroot}/usr/lib/systemd/system/update-triggers.target.wants/fontconfig-trigger.service
 ## install_append end
+/usr/bin/elf-move.py avx2 %{buildroot}-v3 %{buildroot}/usr/share/clear/optimized-elf/ %{buildroot}/usr/share/clear/filemap/filemap-%{name}
 
 %files
 %defattr(-,root,root,-)
@@ -244,6 +280,7 @@ ln -s ../fontconfig-trigger.service  %{buildroot}/usr/lib/systemd/system/update-
 /usr/bin/fc-query
 /usr/bin/fc-scan
 /usr/bin/fc-validate
+/usr/share/clear/optimized-elf/bin*
 
 %files data
 %defattr(-,root,root,-)
@@ -542,10 +579,15 @@ ln -s ../fontconfig-trigger.service  %{buildroot}/usr/lib/systemd/system/update-
 %defattr(0644,root,root,0755)
 %doc /usr/share/doc/fontconfig/*
 
+%files filemap
+%defattr(-,root,root,-)
+/usr/share/clear/filemap/filemap-fontconfig
+
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libfontconfig.so.1
 /usr/lib64/libfontconfig.so.1.12.0
+/usr/share/clear/optimized-elf/lib*
 
 %files lib32
 %defattr(-,root,root,-)
