@@ -4,7 +4,7 @@
 #
 Name     : fontconfig
 Version  : 2.13.1
-Release  : 47
+Release  : 48
 URL      : https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.13.1.tar.gz
 Source0  : https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.13.1.tar.gz
 Source1  : fontconfig-trigger.service
@@ -190,7 +190,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1634687283
+export SOURCE_DATE_EPOCH=1656028573
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -233,7 +233,7 @@ cd ../buildavx2;
 make %{?_smp_mflags} check || : || :
 
 %install
-export SOURCE_DATE_EPOCH=1634687283
+export SOURCE_DATE_EPOCH=1656028573
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/fontconfig
 cp %{_builddir}/fontconfig-2.13.1/COPYING %{buildroot}/usr/share/package-licenses/fontconfig/ae92a5e66650b2e46038f56b0159851840513476
@@ -264,7 +264,7 @@ install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/fontconfig-trigge
 mkdir -p %{buildroot}/usr/lib/systemd/system/update-triggers.target.wants/
 ln -s ../fontconfig-trigger.service  %{buildroot}/usr/lib/systemd/system/update-triggers.target.wants/fontconfig-trigger.service
 ## install_append end
-/usr/bin/elf-move.py avx2 %{buildroot}-v3 %{buildroot}/usr/share/clear/optimized-elf/ %{buildroot}/usr/share/clear/filemap/filemap-%{name}
+/usr/bin/elf-move.py avx2 %{buildroot}-v3 %{buildroot} %{buildroot}/usr/share/clear/filemap/filemap-%{name}
 
 %files
 %defattr(-,root,root,-)
@@ -585,9 +585,11 @@ ln -s ../fontconfig-trigger.service  %{buildroot}/usr/lib/systemd/system/update-
 
 %files lib
 %defattr(-,root,root,-)
+/usr/lib64/glibc-hwcaps/x86-64-v3/libfontconfig.so
+/usr/lib64/glibc-hwcaps/x86-64-v3/libfontconfig.so.1
+/usr/lib64/glibc-hwcaps/x86-64-v3/libfontconfig.so.1.12.0
 /usr/lib64/libfontconfig.so.1
 /usr/lib64/libfontconfig.so.1.12.0
-/usr/share/clear/optimized-elf/lib*
 
 %files lib32
 %defattr(-,root,root,-)
