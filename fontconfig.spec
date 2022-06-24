@@ -4,7 +4,7 @@
 #
 Name     : fontconfig
 Version  : 2.13.1
-Release  : 48
+Release  : 49
 URL      : https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.13.1.tar.gz
 Source0  : https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.13.1.tar.gz
 Source1  : fontconfig-trigger.service
@@ -190,7 +190,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1656028573
+export SOURCE_DATE_EPOCH=1656110725
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -233,7 +233,7 @@ cd ../buildavx2;
 make %{?_smp_mflags} check || : || :
 
 %install
-export SOURCE_DATE_EPOCH=1656028573
+export SOURCE_DATE_EPOCH=1656110725
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/fontconfig
 cp %{_builddir}/fontconfig-2.13.1/COPYING %{buildroot}/usr/share/package-licenses/fontconfig/ae92a5e66650b2e46038f56b0159851840513476
