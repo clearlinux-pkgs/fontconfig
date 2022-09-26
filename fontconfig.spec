@@ -4,7 +4,7 @@
 #
 Name     : fontconfig
 Version  : 2.13.1
-Release  : 52
+Release  : 53
 URL      : https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.13.1.tar.gz
 Source0  : https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.13.1.tar.gz
 Source1  : fontconfig-trigger.service
