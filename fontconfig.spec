@@ -4,7 +4,7 @@
 #
 Name     : fontconfig
 Version  : 2.13.1
-Release  : 53
+Release  : 54
 URL      : https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.13.1.tar.gz
 Source0  : https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.13.1.tar.gz
 Source1  : fontconfig-trigger.service
@@ -190,7 +190,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1656110725
+export SOURCE_DATE_EPOCH=1665098208
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -233,10 +233,10 @@ cd ../buildavx2;
 make %{?_smp_mflags} check || : || :
 
 %install
-export SOURCE_DATE_EPOCH=1656110725
+export SOURCE_DATE_EPOCH=1665098208
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/fontconfig
-cp %{_builddir}/fontconfig-2.13.1/COPYING %{buildroot}/usr/share/package-licenses/fontconfig/ae92a5e66650b2e46038f56b0159851840513476
+cp %{_builddir}/fontconfig-%{version}/COPYING %{buildroot}/usr/share/package-licenses/fontconfig/ae92a5e66650b2e46038f56b0159851840513476
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -350,6 +350,7 @@ ln -s ../fontconfig-trigger.service  %{buildroot}/usr/lib/systemd/system/update-
 /usr/include/fontconfig/fcfreetype.h
 /usr/include/fontconfig/fcprivate.h
 /usr/include/fontconfig/fontconfig.h
+/usr/lib64/glibc-hwcaps/x86-64-v3/libfontconfig.so
 /usr/lib64/libfontconfig.so
 /usr/lib64/pkgconfig/fontconfig.pc
 /usr/share/man/man3/FcAtomicCreate.3
@@ -585,7 +586,6 @@ ln -s ../fontconfig-trigger.service  %{buildroot}/usr/lib/systemd/system/update-
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/glibc-hwcaps/x86-64-v3/libfontconfig.so
 /usr/lib64/glibc-hwcaps/x86-64-v3/libfontconfig.so.1
 /usr/lib64/glibc-hwcaps/x86-64-v3/libfontconfig.so.1.12.0
 /usr/lib64/libfontconfig.so.1
