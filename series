@@ -1,4 +1,4 @@
 0001-Include-stateless-configuration.patch
 0002-Add-spacing-config-for-Clear-Sans.patch
-0003-Use-sane-defaults-throughout-the-system.patch
-0004-Enforce-antialiasing-by-default.patch
+#0003-Use-sane-defaults-throughout-the-system.patch
+#0004-Enforce-antialiasing-by-default.patch

@@ -8,42 +8,35 @@ Subject: [PATCH 1/4] Include stateless configuration.
  src/fcinit.c        | 2 ++
  2 files changed, 8 insertions(+)
 
-diff --git a/conf.d/50-user.conf b/conf.d/50-user.conf
-index 681ed6d..9a24f58 100644
---- a/conf.d/50-user.conf
-+++ b/conf.d/50-user.conf
-@@ -6,12 +6,18 @@
-   </its:rules>
- 
+--- fontconfig-2.14.2/src/fcinit.c~	2020-12-03 11:45:00.000000000 +0000
++++ fontconfig-2.14.2/src/fcinit.c	2023-01-27 15:47:53.910591214 +0000
+@@ -45,6 +45,8 @@
+ 	"  <dir prefix=\"xdg\">fonts</dir>" \
+ 	"  <cachedir>" FC_CACHEDIR "</cachedir>" \
+ 	"  <cachedir prefix=\"xdg\">fontconfig</cachedir>" \
++        "  <include ignore_missing=\"no\">/usr/share/defaults/fonts/conf.d</include>" \
++        "  <include ignore_missing=\"no\">/usr/share/defaults/fonts/fonts.conf</include>" \
+ 	"  <include ignore_missing=\"yes\">" CONFIGDIR "</include>" \
+ 	"  <include ignore_missing=\"yes\" prefix=\"xdg\">fontconfig/conf.d</include>" \
+ 	"  <include ignore_missing=\"yes\" prefix=\"xdg\">fontconfig/fonts.conf</include>" \
+--- fontconfig-2.14.2/conf.d/50-user.conf~	2020-12-03 11:45:00.000000000 +0000
++++ fontconfig-2.14.2/conf.d/50-user.conf	2023-01-27 15:49:41.042317547 +0000
+@@ -2,12 +2,18 @@
+ <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+ <fontconfig>
    <description>Load per-user customization files</description>
-+	<!-- global OS wide defaults -->
-+	<include ignore_missing="no">/usr/share/defaults/fonts/conf.d</include>
-+	<include ignore_missing="no">/usr/share/defaults/fonts/fonts.conf</include>
++       <!-- global OS wide defaults -->
++       <include ignore_missing="no">/usr/share/defaults/fonts/conf.d</include>
++       <include ignore_missing="no">/usr/share/defaults/fonts/fonts.conf</include>
  	<!--
  	    Load per-user customization files where stored on XDG Base Directory
  	    specification compliant places. it should be usually:
  	      $HOME/.config/fontconfig/conf.d
  	      $HOME/.config/fontconfig/fonts.conf
  	-->
-+	<include ignore_missing="yes">/etc/fonts/conf.d</include>
-+	<include ignore_missing="yes">/etc/fonts/fonts.conf</include>
++        <include ignore_missing="yes">/etc/fonts/conf.d</include>
++        <include ignore_missing="yes">/etc/fonts/fonts.conf</include>
 +
  	<include ignore_missing="yes" prefix="xdg">fontconfig/conf.d</include>
  	<include ignore_missing="yes" prefix="xdg">fontconfig/fonts.conf</include>
  	<!-- the following elements will be removed in the future -->
-diff --git a/src/fcinit.c b/src/fcinit.c
-index 5831a19..fc93c4b 100644
---- a/src/fcinit.c
-+++ b/src/fcinit.c
-@@ -45,6 +45,8 @@ FcInitFallbackConfig (const FcChar8 *sysroot)
- 	"  <dir prefix=\"xdg\">fonts</dir>" \
- 	"  <cachedir>" FC_CACHEDIR "</cachedir>" \
- 	"  <cachedir prefix=\"xdg\">fontconfig</cachedir>" \
-+	"  <include ignore_missing=\"no\">/usr/share/defaults/fonts/conf.d</include>" \
-+	"  <include ignore_missing=\"no\">/usr/share/defaults/fonts/fonts.conf</include>" \
- 	"  <include ignore_missing=\"yes\" prefix=\"xdg\">fontconfig/conf.d</include>" \
- 	"  <include ignore_missing=\"yes\" prefix=\"xdg\">fontconfig/fonts.conf</include>" \
- 	"</fontconfig>";
--- 
-2.21.0
-
