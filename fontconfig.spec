@@ -5,7 +5,7 @@
 #
 Name     : fontconfig
 Version  : 2.14.2
-Release  : 58
+Release  : 59
 URL      : https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.14.2.tar.gz
 Source0  : https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.14.2.tar.gz
 Source1  : fontconfig-trigger.service
@@ -173,7 +173,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1682964772
+export SOURCE_DATE_EPOCH=1685503802
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -216,7 +216,7 @@ cd ../buildavx2;
 make %{?_smp_mflags} check || : || :
 
 %install
-export SOURCE_DATE_EPOCH=1682964772
+export SOURCE_DATE_EPOCH=1685503802
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/fontconfig
 cp %{_builddir}/fontconfig-%{version}/COPYING %{buildroot}/usr/share/package-licenses/fontconfig/6b63cb28fcb69a3ec7b61fa7827228803a659bc0 || :
@@ -347,7 +347,6 @@ ln -s ../fontconfig-trigger.service  %{buildroot}/usr/lib/systemd/system/update-
 
 %files dev
 %defattr(-,root,root,-)
-/V3/usr/lib64/libfontconfig.so
 /usr/include/fontconfig/fcfreetype.h
 /usr/include/fontconfig/fcprivate.h
 /usr/include/fontconfig/fontconfig.h
@@ -585,7 +584,6 @@ ln -s ../fontconfig-trigger.service  %{buildroot}/usr/lib/systemd/system/update-
 
 %files lib
 %defattr(-,root,root,-)
-/V3/usr/lib64/libfontconfig.so.1
 /V3/usr/lib64/libfontconfig.so.1.12.0
 /usr/lib64/libfontconfig.so.1
 /usr/lib64/libfontconfig.so.1.12.0
